@@ -18,7 +18,7 @@ import {
 const Home: NextPage = () => {
 	return (
 		<div className={styles.container}>
-			<Accordion defaultIndex={[0]} allowMultiple={true}>
+			<Accordion defaultIndex={[0]} allowMultiple={false}>
 				<AccordionItem>
 					<h2>
 						<AccordionButton>
@@ -66,9 +66,7 @@ const Home: NextPage = () => {
 							</Box>
 						</Box>
 
-						<Button margin="1em auto" maxWidth="500px">
-							Inserir
-						</Button>
+						<Button margin="1em auto">Inserir</Button>
 					</AccordionPanel>
 				</AccordionItem>
 
@@ -143,7 +141,23 @@ const Home: NextPage = () => {
 							<AccordionIcon />
 						</AccordionButton>
 					</h2>
-					<AccordionPanel pb={4}></AccordionPanel>
+					<AccordionPanel pb={4} className={styles.growAll}>
+						<Box margin="1em 0">
+							<Text>Distância mínima</Text>
+							<Input />
+							<Button marginTop="1em">Aviões próximos ao aeroporto</Button>
+						</Box>
+						<Box margin="1em 0">
+							<Text>Distância mínima</Text>
+							<Input />
+							<Button marginTop="1em">Aviões próximos</Button>
+						</Box>
+						<Box margin="1em 0">
+							<Text>Tempo mínimo</Text>
+							<Input />
+							<Button marginTop="1em">Em rota de colisão</Button>
+						</Box>
+					</AccordionPanel>
 				</AccordionItem>
 			</Accordion>
 		</div>
