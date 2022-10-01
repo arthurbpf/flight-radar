@@ -3,3 +3,23 @@
 	padding: 0 2rem;
 	display: flex;
 }
+
+.actionsForm {
+	width: 25vw;
+}
+
+.radar {
+	flex: 1;
+}
+
+.rightColumn {
+	max-width: 33vw;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+
+	& > * {
+		flex: 1;
+		flex-basis: 50%;
+	}
+}

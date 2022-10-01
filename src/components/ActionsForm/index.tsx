@@ -14,16 +14,11 @@ import {
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { useEffect } from 'react';
+import Airplane from '../../types/Airplane';
+import useAirplanesStore from '../../stores/airplanesStore';
 
 const InputForm = () => {
-	interface FormData {
-		x: number;
-		y: number;
-		radius: number;
-		angle: number;
-		speed: number;
-		direction: number;
-	}
+	const addAirplane = useAirplanesStore((state) => state.addAirplane);
 
 	const {
 		register,
@@ -31,9 +26,11 @@ const InputForm = () => {
 		reset,
 		formState,
 		formState: { isSubmitSuccessful }
-	} = useForm<FormData>();
+	} = useForm<Airplane>();
 
-	const onSubmit = (data: FormData) => {};
+	const onSubmit = (data: Airplane) => {
+		addAirplane(data);
+	};
 
 	useEffect(() => {
 		if (isSubmitSuccessful) {
@@ -43,12 +40,7 @@ const InputForm = () => {
 
 	return (
 		<form onSubmit={handleSubmit(onSubmit)}>
-			<Box
-				width="100%"
-				display="grid"
-				gridTemplateColumns="auto auto"
-				gridGap=".5em"
-			>
+			<Box display="grid" gridTemplateColumns="50% 50%" gridGap=".5em">
 				<Box>
 					<Text>X</Text>
 					<Input {...register('x')} />
@@ -82,10 +74,14 @@ const InputForm = () => {
 	);
 };
 
-const ActionsForm = () => {
+interface ActionsFormParams {
+	className?: string;
+}
+
+const ActionsForm = (params: ActionsFormParams) => {
 	return (
 		<Accordion
-			className={styles.expandAll}
+			className={`${styles.expandAll} ${params.className || ''}`}
 			defaultIndex={[0]}
 			allowMultiple={false}
 		>
