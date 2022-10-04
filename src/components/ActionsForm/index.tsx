@@ -16,22 +16,46 @@ import { useForm } from 'react-hook-form';
 import { useEffect } from 'react';
 import Airplane from '../../types/Airplane';
 import useAirplanesStore from '../../stores/airplanesStore';
+import {
+	convertToCartesian,
+	convertToPolar
+} from '../../utils/coordinateConversion';
 
 const InputForm = () => {
 	const addAirplane = useAirplanesStore((state) => state.addAirplane);
-
 	const {
 		register,
 		handleSubmit,
 		reset,
 		formState,
-		formState: { isSubmitSuccessful }
+		formState: { isSubmitSuccessful },
+		getValues,
+		setValue
 	} = useForm<Airplane>();
 
 	const onSubmit = (data: Airplane) => {
 		addAirplane(data);
 	};
 
+	const handleCartesianChanges = (args: { x?: number; y?: number }) => {
+		const formData = { ...getValues(), ...args };
+
+		const { radius, angle } = convertToPolar(formData.x, formData.y);
+
+		setValue('radius', radius);
+		setValue('angle', angle);
+	};
+
+	const handlePolarChanges = (args: { radius?: number; angle?: number }) => {
+		const formData = { ...getValues(), ...args };
+
+		const { x, y } = convertToCartesian(formData.radius, formData.angle);
+
+		setValue('x', x);
+		setValue('y', y);
+	};
+
+	// resets form after submission
 	useEffect(() => {
 		if (isSubmitSuccessful) {
 			reset();
@@ -43,27 +67,51 @@ const InputForm = () => {
 			<Box display="grid" gridTemplateColumns="50% 50%" gridGap=".5em">
 				<Box>
 					<Text>X</Text>
-					<Input {...register('x')} />
+					<Input
+						type="number"
+						{...register('x')}
+						onChange={(event) =>
+							handleCartesianChanges({ x: event.target.valueAsNumber })
+						}
+					/>
 				</Box>
 				<Box>
 					<Text>Y</Text>
-					<Input {...register('y')} />
+					<Input
+						type="number"
+						{...register('y')}
+						onChange={(event) =>
+							handleCartesianChanges({ y: event.target.valueAsNumber })
+						}
+					/>
 				</Box>
 				<Box>
 					<Text>Raio</Text>
-					<Input {...register('radius')} />
+					<Input
+						type="number"
+						{...register('radius')}
+						onChange={(event) =>
+							handlePolarChanges({ radius: event.target.valueAsNumber })
+						}
+					/>
 				</Box>
 				<Box>
 					<Text>Ângulo</Text>
-					<Input {...register('angle')} />
+					<Input
+						type="number"
+						{...register('angle')}
+						onChange={(event) =>
+							handlePolarChanges({ angle: event.target.valueAsNumber })
+						}
+					/>
 				</Box>
 				<Box>
 					<Text>Velocidade</Text>
-					<Input {...register('speed')} />
+					<Input type="number" {...register('speed')} />
 				</Box>
 				<Box>
 					<Text>Direção</Text>
-					<Input {...register('direction')} />
+					<Input type="number" {...register('direction')} />
 				</Box>
 			</Box>
 
@@ -115,11 +163,11 @@ const ActionsForm = (params: ActionsFormParams) => {
 								<Box display="flex" gap="1em">
 									<Box>
 										<Text>X</Text>
-										<Input />
+										<Input type="number" />
 									</Box>
 									<Box>
 										<Text>Y</Text>
-										<Input />
+										<Input type="number" />
 									</Box>
 								</Box>
 								<Button marginTop="1em">Transladar</Button>
@@ -128,11 +176,11 @@ const ActionsForm = (params: ActionsFormParams) => {
 								<Box display="flex" gap="1em">
 									<Box>
 										<Text>X</Text>
-										<Input />
+										<Input type="number" />
 									</Box>
 									<Box>
 										<Text>Y</Text>
-										<Input />
+										<Input type="number" />
 									</Box>
 								</Box>
 
@@ -142,13 +190,13 @@ const ActionsForm = (params: ActionsFormParams) => {
 
 						<Box margin="1em auto">
 							<Text>Ângulo</Text>
-							<Input />
+							<Input type="number" />
 							<Text>Centro de rotação</Text>
 							<InputGroup>
 								<InputLeftAddon>X</InputLeftAddon>
-								<Input />
+								<Input type="number" />
 								<InputLeftAddon marginLeft="1em">Y</InputLeftAddon>
-								<Input />
+								<Input type="number" />
 							</InputGroup>
 							<Button marginTop="1em">Rotacionar</Button>
 						</Box>
@@ -168,17 +216,17 @@ const ActionsForm = (params: ActionsFormParams) => {
 				<AccordionPanel pb={4}>
 					<Box margin="1em 0">
 						<Text>Distância mínima</Text>
-						<Input />
+						<Input type="number" />
 						<Button marginTop="1em">Aviões próximos ao aeroporto</Button>
 					</Box>
 					<Box margin="1em 0">
 						<Text>Distância mínima</Text>
-						<Input />
+						<Input type="number" />
 						<Button marginTop="1em">Aviões próximos</Button>
 					</Box>
 					<Box margin="1em 0">
 						<Text>Tempo mínimo</Text>
-						<Input />
+						<Input type="number" />
 						<Button marginTop="1em">Em rota de colisão</Button>
 					</Box>
 				</AccordionPanel>
