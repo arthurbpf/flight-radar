@@ -16,6 +16,7 @@ import useAirplanesStore from '../../stores/airplanesStore';
 
 const AirplanesList = () => {
 	const airplanes = useAirplanesStore((state) => state.airplanes);
+	const removeAirplane = useAirplanesStore((state) => state.removeAirplane);
 
 	return (
 		<TableContainer width="100%">
@@ -46,14 +47,14 @@ const AirplanesList = () => {
 									</span>
 								</Tooltip>
 							</Td>
-							<Td>{airplane.x}</Td>
-							<Td>{airplane.y}</Td>
-							<Td>{airplane.radius}</Td>
-							<Td>{airplane.angle}</Td>
-							<Td>{airplane.speed}</Td>
-							<Td>{airplane.direction}</Td>
+							<Td>{Number(airplane.x).toFixed(2)}</Td>
+							<Td>{Number(airplane.y).toFixed(2)}</Td>
+							<Td>{Number(airplane.radius).toFixed(2)}</Td>
+							<Td>{Number(airplane.angle).toFixed(2)}</Td>
+							<Td>{Number(airplane.speed).toFixed(2)}</Td>
+							<Td>{Number(airplane.direction).toFixed(2)}</Td>
 							<Td>
-								<span>
+								<span onClick={() => removeAirplane(airplane.id)}>
 									<FiTrash className={styles.deleteIcon} />
 								</span>
 							</Td>

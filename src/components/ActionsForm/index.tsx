@@ -69,6 +69,7 @@ const InputForm = () => {
 					<Text>X</Text>
 					<Input
 						type="number"
+						step="any"
 						{...register('x')}
 						onChange={(event) =>
 							handleCartesianChanges({ x: event.target.valueAsNumber })
@@ -79,6 +80,7 @@ const InputForm = () => {
 					<Text>Y</Text>
 					<Input
 						type="number"
+						step="any"
 						{...register('y')}
 						onChange={(event) =>
 							handleCartesianChanges({ y: event.target.valueAsNumber })
@@ -89,6 +91,7 @@ const InputForm = () => {
 					<Text>Raio</Text>
 					<Input
 						type="number"
+						step="any"
 						{...register('radius')}
 						onChange={(event) =>
 							handlePolarChanges({ radius: event.target.valueAsNumber })
@@ -99,6 +102,7 @@ const InputForm = () => {
 					<Text>Ângulo</Text>
 					<Input
 						type="number"
+						step="any"
 						{...register('angle')}
 						onChange={(event) =>
 							handlePolarChanges({ angle: event.target.valueAsNumber })
@@ -107,11 +111,11 @@ const InputForm = () => {
 				</Box>
 				<Box>
 					<Text>Velocidade</Text>
-					<Input type="number" {...register('speed')} />
+					<Input type="number" step="any" {...register('speed')} />
 				</Box>
 				<Box>
 					<Text>Direção</Text>
-					<Input type="number" {...register('direction')} />
+					<Input type="number" step="any" {...register('direction')} />
 				</Box>
 			</Box>
 
@@ -163,11 +167,11 @@ const ActionsForm = (params: ActionsFormParams) => {
 								<Box display="flex" gap="1em">
 									<Box>
 										<Text>X</Text>
-										<Input type="number" />
+										<Input type="number" step="any" />
 									</Box>
 									<Box>
 										<Text>Y</Text>
-										<Input type="number" />
+										<Input type="number" step="any" />
 									</Box>
 								</Box>
 								<Button marginTop="1em">Transladar</Button>
@@ -176,11 +180,11 @@ const ActionsForm = (params: ActionsFormParams) => {
 								<Box display="flex" gap="1em">
 									<Box>
 										<Text>X</Text>
-										<Input type="number" />
+										<Input type="number" step="any" />
 									</Box>
 									<Box>
 										<Text>Y</Text>
-										<Input type="number" />
+										<Input type="number" step="any" />
 									</Box>
 								</Box>
 
@@ -190,13 +194,13 @@ const ActionsForm = (params: ActionsFormParams) => {
 
 						<Box margin="1em auto">
 							<Text>Ângulo</Text>
-							<Input type="number" />
+							<Input type="number" step="any" />
 							<Text>Centro de rotação</Text>
 							<InputGroup>
 								<InputLeftAddon>X</InputLeftAddon>
-								<Input type="number" />
+								<Input type="number" step="any" />
 								<InputLeftAddon marginLeft="1em">Y</InputLeftAddon>
-								<Input type="number" />
+								<Input type="number" step="any" />
 							</InputGroup>
 							<Button marginTop="1em">Rotacionar</Button>
 						</Box>
@@ -216,17 +220,17 @@ const ActionsForm = (params: ActionsFormParams) => {
 				<AccordionPanel pb={4}>
 					<Box margin="1em 0">
 						<Text>Distância mínima</Text>
-						<Input type="number" />
+						<Input type="number" step="any" />
 						<Button marginTop="1em">Aviões próximos ao aeroporto</Button>
 					</Box>
 					<Box margin="1em 0">
 						<Text>Distância mínima</Text>
-						<Input type="number" />
+						<Input type="number" step="any" />
 						<Button marginTop="1em">Aviões próximos</Button>
 					</Box>
 					<Box margin="1em 0">
 						<Text>Tempo mínimo</Text>
-						<Input type="number" />
+						<Input type="number" step="any" />
 						<Button marginTop="1em">Em rota de colisão</Button>
 					</Box>
 				</AccordionPanel>

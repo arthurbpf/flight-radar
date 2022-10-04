@@ -10,11 +10,11 @@ const Home: NextPage = () => {
 	return (
 		<div className={styles.container}>
 			<ActionsForm className={styles.actionsForm} />
-			<Radar className={styles.radar} />
 			<Box className={styles.rightColumn}>
-				<AirplanesList />
+				<Radar className={styles.radar} />
 				<LogList />
 			</Box>
+			<AirplanesList />
 		</div>
 	);
 };
