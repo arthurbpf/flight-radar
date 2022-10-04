@@ -4,7 +4,7 @@ interface convertToPolarReturn {
 }
 
 export const convertToPolar = (x: number, y: number): convertToPolarReturn => {
-	const radius = Math.sqrt(x ^ (2 + y) ^ 2);
+	const radius = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
 	const angle = Math.atan(y / x);
 
 	return { radius, angle };
