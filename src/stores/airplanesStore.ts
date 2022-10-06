@@ -7,6 +7,8 @@ interface AirplanesState {
 	selection: string[];
 	addAirplane: (airplane: Airplane) => void;
 	removeAirplane: (id: string) => void;
+	selectAirplane: (id: string) => void;
+	deselectAirplane: (id: string) => void;
 }
 
 const useAirplanesStore = create<AirplanesState>()((set) => ({
@@ -19,6 +21,22 @@ const useAirplanesStore = create<AirplanesState>()((set) => ({
 	removeAirplane: (id) => {
 		set((state) => ({
 			airplanes: state.airplanes.filter((airplane) => airplane.id !== id)
+		}));
+	},
+	selectAirplane: (id) => {
+		set((state) => {
+			let newSelection = [...state.selection, id];
+
+			newSelection = [...new Set(newSelection)];
+
+			return {
+				selection: newSelection
+			};
+		});
+	},
+	deselectAirplane: (id) => {
+		set((state) => ({
+			selection: state.selection.filter((selectedId) => selectedId !== id)
 		}));
 	}
 }));

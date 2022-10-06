@@ -17,6 +17,8 @@ import useAirplanesStore from '../../stores/airplanesStore';
 const AirplanesList = () => {
 	const airplanes = useAirplanesStore((state) => state.airplanes);
 	const removeAirplane = useAirplanesStore((state) => state.removeAirplane);
+	const selectAirplane = useAirplanesStore((state) => state.selectAirplane);
+	const deselectAirplane = useAirplanesStore((state) => state.deselectAirplane);
 
 	return (
 		<TableContainer width="100%">
