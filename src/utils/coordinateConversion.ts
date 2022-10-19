@@ -3,7 +3,13 @@ const convertToRad = (angleInDeg: number) => {
 };
 
 const convertToDeg = (angleInRad: number) => {
-	return angleInRad * (180 / Math.PI);
+	let angleInDeg = angleInRad * (180 / Math.PI);
+
+	if (angleInDeg < 0) {
+		angleInDeg += 360;
+	}
+
+	return angleInDeg;
 };
 
 interface convertToPolarReturn {
