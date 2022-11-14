@@ -1,4 +1,4 @@
-import { Box, Icon } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 import { VictoryChart, VictoryScatter, VictoryTheme } from 'victory';
 import useAirplanesStore from '../../stores/airplanesStore';
 import { IoIosAirplane } from 'react-icons/io';
@@ -53,10 +53,10 @@ const AirplanePoint = (props: any) => {
 			style={{
 				transformBox: 'fill-box',
 				transformOrigin: 'center',
-				transform: `rotate(${angle}deg)`
+				transform: `rotate(${-angle}deg)`
 			}}
 		>
-			<IoIosAirplane x={x} y={y} height="2em" fontSize={`${size}px`} />
+			<IoIosAirplane x={x} y={y} fontSize={`${size}px`} />
 		</g>
 	);
 };
