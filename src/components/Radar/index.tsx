@@ -37,10 +37,27 @@ const Radar = ({ className }: RadarProps) => {
 };
 
 const AirplanePoint = (props: any) => {
-	const { x, y, datum } = props;
+	const { datum } = props;
+	const angle = datum?.direction.toString() || '0';
+	const id = datum?.id || '';
+	let { x, y } = props;
+
+	const size = 15;
+
+	x -= size / 2;
+	y -= size / 2;
 
 	return (
-		<IoIosAirplane x={x} y={y} transform={`rotate(${datum.direction + 90})`} />
+		<g
+			id={id}
+			style={{
+				transformBox: 'fill-box',
+				transformOrigin: 'center',
+				transform: `rotate(${angle}deg)`
+			}}
+		>
+			<IoIosAirplane x={x} y={y} height="2em" fontSize={`${size}px`} />
+		</g>
 	);
 };
 export default Radar;
