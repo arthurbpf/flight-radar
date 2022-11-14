@@ -70,7 +70,7 @@ const InputForm = () => {
 					<Input
 						type="number"
 						step="any"
-						{...register('x')}
+						{...register('x', { valueAsNumber: true })}
 						onChange={(event) =>
 							handleCartesianChanges({ x: event.target.valueAsNumber })
 						}
@@ -81,7 +81,7 @@ const InputForm = () => {
 					<Input
 						type="number"
 						step="any"
-						{...register('y')}
+						{...register('y', { valueAsNumber: true })}
 						onChange={(event) =>
 							handleCartesianChanges({ y: event.target.valueAsNumber })
 						}
@@ -92,7 +92,7 @@ const InputForm = () => {
 					<Input
 						type="number"
 						step="any"
-						{...register('radius')}
+						{...register('radius', { valueAsNumber: true })}
 						onChange={(event) =>
 							handlePolarChanges({ radius: event.target.valueAsNumber })
 						}
@@ -103,7 +103,7 @@ const InputForm = () => {
 					<Input
 						type="number"
 						step="any"
-						{...register('angle')}
+						{...register('angle', { valueAsNumber: true })}
 						onChange={(event) =>
 							handlePolarChanges({ angle: event.target.valueAsNumber })
 						}
@@ -111,11 +111,19 @@ const InputForm = () => {
 				</Box>
 				<Box>
 					<Text>Velocidade</Text>
-					<Input type="number" step="any" {...register('speed')} />
+					<Input
+						type="number"
+						step="any"
+						{...register('speed', { valueAsNumber: true })}
+					/>
 				</Box>
 				<Box>
 					<Text>Direção</Text>
-					<Input type="number" step="any" {...register('direction')} />
+					<Input
+						type="number"
+						step="any"
+						{...register('direction', { valueAsNumber: true })}
+					/>
 				</Box>
 			</Box>
 
