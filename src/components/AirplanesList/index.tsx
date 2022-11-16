@@ -15,10 +15,13 @@ import { FiInfo, FiTrash } from 'react-icons/fi';
 import useAirplanesStore from '../../stores/airplanesStore';
 
 const AirplanesList = () => {
-	const airplanes = useAirplanesStore((state) => state.airplanes);
-	const removeAirplane = useAirplanesStore((state) => state.removeAirplane);
-	const selectAirplane = useAirplanesStore((state) => state.selectAirplane);
-	const deselectAirplane = useAirplanesStore((state) => state.deselectAirplane);
+	const {
+		airplanes,
+		selection,
+		removeAirplane,
+		selectAirplane,
+		deselectAirplane
+	} = useAirplanesStore((state) => state);
 
 	return (
 		<TableContainer width="100%">
@@ -40,7 +43,14 @@ const AirplanesList = () => {
 					{airplanes.map((airplane) => (
 						<Tr key={airplane.id}>
 							<Td>
-								<Checkbox />
+								<Checkbox
+									isChecked={selection.includes(airplane.id)}
+									onChange={(e) =>
+										e.target.checked
+											? selectAirplane(airplane.id)
+											: deselectAirplane(airplane.id)
+									}
+								/>
 							</Td>
 							<Td>
 								<Tooltip label={airplane.id}>

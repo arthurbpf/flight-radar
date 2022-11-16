@@ -20,6 +20,7 @@ import {
 	convertToCartesian,
 	convertToPolar
 } from '../../utils/coordinateConversion';
+import { translate } from '../../utils/transformationFunctions';
 
 const InputForm = () => {
 	const addAirplane = useAirplanesStore((state) => state.addAirplane);
@@ -134,6 +135,119 @@ const InputForm = () => {
 	);
 };
 
+const TransformationForm = () => {
+	interface TranslateFormData {
+		x: number;
+		y: number;
+	}
+
+	const TranslateForm = () => {
+		const { airplanes, selection, setAirplanes } = useAirplanesStore(
+			(state) => state
+		);
+
+		const {
+			register,
+			handleSubmit,
+			reset,
+			formState,
+			formState: { isSubmitSuccessful }
+		} = useForm<TranslateFormData>({ defaultValues: { x: 0, y: 0 } });
+
+		const onSubmit = (data: TranslateFormData) => {
+			const newAirplanes = airplanes.map((airplane) => {
+				if (selection.includes(airplane.id)) {
+					return translate(airplane, data.x, data.y);
+				}
+
+				return airplane;
+			});
+
+			setAirplanes(newAirplanes);
+		};
+
+		useEffect(() => {
+			if (isSubmitSuccessful) {
+				reset();
+			}
+		}, [formState, reset]);
+
+		return (
+			<form onSubmit={handleSubmit(onSubmit)}>
+				<Box>
+					<Box display="flex" gap="1em">
+						<Box>
+							<Text>X</Text>
+							<Input
+								type="number"
+								step="any"
+								{...register('x', { valueAsNumber: true })}
+							/>
+						</Box>
+						<Box>
+							<Text>Y</Text>
+							<Input
+								type="number"
+								step="any"
+								{...register('y', { valueAsNumber: true })}
+							/>
+						</Box>
+					</Box>
+					<Button margin="1em auto" type="submit">
+						Transladar
+					</Button>
+				</Box>
+			</form>
+		);
+	};
+
+	const ScaleForm = () => {
+		return (
+			<Box>
+				<Box display="flex" gap="1em">
+					<Box>
+						<Text>X</Text>
+						<Input type="number" step="any" />
+					</Box>
+					<Box>
+						<Text>Y</Text>
+						<Input type="number" step="any" />
+					</Box>
+				</Box>
+
+				<Button marginTop="1em">Escalonar</Button>
+			</Box>
+		);
+	};
+
+	const RotateForm = () => {
+		return (
+			<Box margin="1em auto">
+				<Text>Ângulo</Text>
+				<Input type="number" step="any" />
+				<Text>Centro de rotação</Text>
+				<InputGroup>
+					<InputLeftAddon>X</InputLeftAddon>
+					<Input type="number" step="any" />
+					<InputLeftAddon marginLeft="1em">Y</InputLeftAddon>
+					<Input type="number" step="any" />
+				</InputGroup>
+				<Button marginTop="1em">Rotacionar</Button>
+			</Box>
+		);
+	};
+
+	return (
+		<Box margin="1em">
+			<Box display="flex" gap="1em">
+				<TranslateForm />
+				<ScaleForm />
+			</Box>
+
+			<RotateForm />
+		</Box>
+	);
+};
 interface ActionsFormParams {
 	className?: string;
 }
@@ -169,50 +283,7 @@ const ActionsForm = (params: ActionsFormParams) => {
 					</AccordionButton>
 				</h2>
 				<AccordionPanel>
-					<Box margin="1em">
-						<Box display="flex" gap="1em">
-							<Box>
-								<Box display="flex" gap="1em">
-									<Box>
-										<Text>X</Text>
-										<Input type="number" step="any" />
-									</Box>
-									<Box>
-										<Text>Y</Text>
-										<Input type="number" step="any" />
-									</Box>
-								</Box>
-								<Button marginTop="1em">Transladar</Button>
-							</Box>
-							<Box>
-								<Box display="flex" gap="1em">
-									<Box>
-										<Text>X</Text>
-										<Input type="number" step="any" />
-									</Box>
-									<Box>
-										<Text>Y</Text>
-										<Input type="number" step="any" />
-									</Box>
-								</Box>
-
-								<Button marginTop="1em">Escalonar</Button>
-							</Box>
-						</Box>
-
-						<Box margin="1em auto">
-							<Text>Ângulo</Text>
-							<Input type="number" step="any" />
-							<Text>Centro de rotação</Text>
-							<InputGroup>
-								<InputLeftAddon>X</InputLeftAddon>
-								<Input type="number" step="any" />
-								<InputLeftAddon marginLeft="1em">Y</InputLeftAddon>
-								<Input type="number" step="any" />
-							</InputGroup>
-							<Button marginTop="1em">Rotacionar</Button>
-						</Box>
-					</Box>
+					<TransformationForm />
 				</AccordionPanel>
 			</AccordionItem>
 
