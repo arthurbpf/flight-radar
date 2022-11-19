@@ -20,7 +20,7 @@ import {
 	convertToCartesian,
 	convertToPolar
 } from '../../utils/coordinateConversion';
-import { translate } from '../../utils/transformationFunctions';
+import { rotate, translate } from '../../utils/transformationFunctions';
 
 const InputForm = () => {
 	const addAirplane = useAirplanesStore((state) => state.addAirplane);
@@ -220,20 +220,73 @@ const TransformationForm = () => {
 		);
 	};
 
+	interface RotateFormData {
+		angle: number;
+		x: number;
+		y: number;
+	}
+
 	const RotateForm = () => {
+		const { airplanes, selection, setAirplanes } = useAirplanesStore(
+			(state) => state
+		);
+
+		const {
+			register,
+			handleSubmit,
+			reset,
+			formState,
+			formState: { isSubmitSuccessful }
+		} = useForm<RotateFormData>({ defaultValues: { angle: 0, x: 0, y: 0 } });
+
+		const onSubmit = (data: RotateFormData) => {
+			const newAirplanes = airplanes.map((airplane) => {
+				if (selection.includes(airplane.id)) {
+					return rotate(airplane, data.angle, data.x, data.y);
+				}
+
+				return airplane;
+			});
+
+			setAirplanes(newAirplanes);
+		};
+
+		useEffect(() => {
+			if (isSubmitSuccessful) {
+				reset();
+			}
+		}, [formState, reset]);
+
 		return (
-			<Box margin="1em auto">
-				<Text>Ângulo</Text>
-				<Input type="number" step="any" />
-				<Text>Centro de rotação</Text>
-				<InputGroup>
-					<InputLeftAddon>X</InputLeftAddon>
-					<Input type="number" step="any" />
-					<InputLeftAddon marginLeft="1em">Y</InputLeftAddon>
-					<Input type="number" step="any" />
-				</InputGroup>
-				<Button marginTop="1em">Rotacionar</Button>
-			</Box>
+			<form onSubmit={handleSubmit(onSubmit)}>
+				<Box margin="1em auto">
+					<Text>Ângulo</Text>
+					<Input
+						type="number"
+						step="any"
+						{...register('angle', { valueAsNumber: true })}
+					/>
+					<Text>Centro de rotação</Text>
+					<InputGroup>
+						<InputLeftAddon>X</InputLeftAddon>
+						<Input
+							type="number"
+							step="any"
+							{...register('x', { valueAsNumber: true })}
+						/>
+
+						<InputLeftAddon marginLeft="1em">Y</InputLeftAddon>
+						<Input
+							type="number"
+							step="any"
+							{...register('y', { valueAsNumber: true })}
+						/>
+					</InputGroup>
+					<Button marginTop="1em" type="submit">
+						Rotacionar
+					</Button>
+				</Box>
+			</form>
 		);
 	};
 

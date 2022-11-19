@@ -1,8 +1,8 @@
-const convertToRad = (angleInDeg: number) => {
+export const convertToRad = (angleInDeg: number) => {
 	return (Math.PI * 2 * angleInDeg) / 360;
 };
 
-const convertToDeg = (angleInRad: number) => {
+export const convertToDeg = (angleInRad: number) => {
 	let angleInDeg = angleInRad * (180 / Math.PI);
 
 	if (angleInDeg < 0) {

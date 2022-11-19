@@ -1,5 +1,5 @@
 import Airplane from '../types/Airplane';
-import { convertToPolar } from './coordinateConversion';
+import { convertToPolar, convertToRad } from './coordinateConversion';
 
 export function translate(airplane: Airplane, x: number, y: number): Airplane {
 	x += airplane.x;
@@ -21,10 +21,16 @@ export function rotate(
 	xCenter: number,
 	yCenter: number
 ): Airplane {
+	rotationAngle = convertToRad(rotationAngle);
+
 	const x =
-		airplane.x * Math.cos(rotationAngle) - airplane.y * Math.sin(rotationAngle);
+		(airplane.x - xCenter) * Math.cos(rotationAngle) -
+		(airplane.y - yCenter) * Math.sin(rotationAngle) +
+		xCenter;
 	const y =
-		airplane.x * Math.sin(rotationAngle) + airplane.y * Math.cos(rotationAngle);
+		(airplane.x - xCenter) * Math.sin(rotationAngle) +
+		(airplane.y - yCenter) * Math.cos(rotationAngle) +
+		yCenter;
 
 	const { angle, radius } = convertToPolar(x, y);
 

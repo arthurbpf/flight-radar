@@ -15,13 +15,11 @@ import { FiInfo, FiTrash } from 'react-icons/fi';
 import useAirplanesStore from '../../stores/airplanesStore';
 
 const AirplanesList = () => {
-	const {
-		airplanes,
-		selection,
-		removeAirplane,
-		selectAirplane,
-		deselectAirplane
-	} = useAirplanesStore((state) => state);
+	const airplanes = useAirplanesStore((state) => state.airplanes);
+	const selection = useAirplanesStore((state) => state.selection);
+	const removeAirplane = useAirplanesStore((state) => state.removeAirplane);
+	const selectAirplane = useAirplanesStore((state) => state.selectAirplane);
+	const deselectAirplane = useAirplanesStore((state) => state.deselectAirplane);
 
 	return (
 		<TableContainer width="100%">

@@ -1,7 +1,6 @@
 import { v4 as uuid } from 'uuid';
 import create from 'zustand';
 import Airplane from '../types/Airplane';
-import { convertToPolar } from '../utils/coordinateConversion';
 
 interface AirplanesState {
 	airplanes: Airplane[];
@@ -17,7 +16,7 @@ const useAirplanesStore = create<AirplanesState>()((set) => ({
 	airplanes: [],
 	selection: [],
 	setAirplanes: (airplanesArray) => {
-		set(() => ({ airplanes: airplanesArray }));
+		set({ airplanes: [...airplanesArray] });
 	},
 	addAirplane: (airplane) => {
 		airplane.id = uuid();
