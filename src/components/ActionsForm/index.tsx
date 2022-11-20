@@ -20,7 +20,7 @@ import {
 	convertToCartesian,
 	convertToPolar
 } from '../../utils/coordinateConversion';
-import { rotate, translate } from '../../utils/transformationFunctions';
+import { rotate, scale, translate } from '../../utils/transformationFunctions';
 
 const InputForm = () => {
 	const addAirplane = useAirplanesStore((state) => state.addAirplane);
@@ -202,21 +202,63 @@ const TransformationForm = () => {
 	};
 
 	const ScaleForm = () => {
-		return (
-			<Box>
-				<Box display="flex" gap="1em">
-					<Box>
-						<Text>X</Text>
-						<Input type="number" step="any" />
-					</Box>
-					<Box>
-						<Text>Y</Text>
-						<Input type="number" step="any" />
-					</Box>
-				</Box>
+		const { airplanes, selection, setAirplanes } = useAirplanesStore(
+			(state) => state
+		);
 
-				<Button marginTop="1em">Escalonar</Button>
-			</Box>
+		const {
+			register,
+			handleSubmit,
+			reset,
+			formState,
+			formState: { isSubmitSuccessful }
+		} = useForm<TranslateFormData>({ defaultValues: { x: 0, y: 0 } });
+
+		const onSubmit = (data: TranslateFormData) => {
+			const newAirplanes = airplanes.map((airplane) => {
+				if (selection.includes(airplane.id)) {
+					return scale(airplane, data.x, data.y);
+				}
+
+				return airplane;
+			});
+
+			setAirplanes(newAirplanes);
+		};
+
+		useEffect(() => {
+			if (isSubmitSuccessful) {
+				reset();
+			}
+		}, [formState, reset]);
+
+		return (
+			<form onSubmit={handleSubmit(onSubmit)}>
+				<Box>
+					<Box display="flex" gap="1em">
+						<Box>
+							<Text>X</Text>
+							<Input
+								type="number"
+								step="any"
+								{...register('x', { valueAsNumber: true })}
+							/>
+						</Box>
+						<Box>
+							<Text>Y</Text>
+							<Input
+								type="number"
+								step="any"
+								{...register('y', { valueAsNumber: true })}
+							/>
+						</Box>
+					</Box>
+
+					<Button marginTop="1em" type="submit">
+						Escalonar
+					</Button>
+				</Box>
+			</form>
 		);
 	};
 

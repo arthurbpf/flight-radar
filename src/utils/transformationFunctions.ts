@@ -41,3 +41,21 @@ export function rotate(
 
 	return airplane;
 }
+
+export function scale(
+	airplane: Airplane,
+	xFactor: number,
+	yFactor: number
+): Airplane {
+	const x = airplane.x * xFactor;
+	const y = airplane.y * yFactor;
+
+	const { angle, radius } = convertToPolar(x, y);
+
+	airplane.x = x;
+	airplane.y = y;
+	airplane.angle = angle;
+	airplane.radius = radius;
+
+	return airplane;
+}
