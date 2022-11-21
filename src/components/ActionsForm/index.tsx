@@ -21,6 +21,7 @@ import {
 	convertToPolar
 } from '../../utils/coordinateConversion';
 import { rotate, scale, translate } from '../../utils/transformationFunctions';
+import { colisionRoute } from '../../utils/colisionRoute';
 
 const InputForm = () => {
 	const addAirplane = useAirplanesStore((state) => state.addAirplane);
@@ -343,11 +344,33 @@ const TransformationForm = () => {
 		</Box>
 	);
 };
+
 interface ActionsFormParams {
 	className?: string;
 }
 
+interface ColisionFormData {
+	time: number;
+}
+
 const ActionsForm = (params: ActionsFormParams) => {
+	const airplanes = useAirplanesStore((state) => state.airplanes);
+
+	const {
+		register,
+		handleSubmit,
+		reset,
+		formState,
+		formState: { isSubmitSuccessful }
+	} = useForm<ColisionFormData>({ defaultValues: { time: 0 } });
+
+	const onSubmit = (data: ColisionFormData) => {
+		const airplanesWithRiskOfColision = colisionRoute(data.time, airplanes);
+
+		if (airplanesWithRiskOfColision.length > 0) {
+		} else {
+		}
+	};
 	return (
 		<Accordion
 			className={`${styles.expandAll} ${params.className || ''}`}
@@ -402,11 +425,19 @@ const ActionsForm = (params: ActionsFormParams) => {
 						<Input type="number" step="any" />
 						<Button marginTop="1em">Aviões próximos</Button>
 					</Box>
-					<Box margin="1em 0">
-						<Text>Tempo mínimo</Text>
-						<Input type="number" step="any" />
-						<Button marginTop="1em">Em rota de colisão</Button>
-					</Box>
+					<form onSubmit={handleSubmit(onSubmit)}>
+						<Box margin="1em 0">
+							<Text>Tempo mínimo</Text>
+							<Input
+								type="number"
+								step="any"
+								{...register('time', { valueAsNumber: true })}
+							/>
+							<Button marginTop="1em" type="submit">
+								Em rota de colisão
+							</Button>
+						</Box>
+					</form>
 				</AccordionPanel>
 			</AccordionItem>
 		</Accordion>
