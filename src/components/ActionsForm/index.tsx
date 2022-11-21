@@ -22,6 +22,10 @@ import {
 } from '../../utils/coordinateConversion';
 import { rotate, scale, translate } from '../../utils/transformationFunctions';
 import { colisionRoute } from '../../utils/colisionRoute';
+import {
+	getAirplanesNextToAirport,
+	getNextPlanes
+} from '../../utils/distances';
 
 const InputForm = () => {
 	const addAirplane = useAirplanesStore((state) => state.addAirplane);
@@ -353,7 +357,83 @@ interface ColisionFormData {
 	time: number;
 }
 
-const ActionsForm = (params: ActionsFormParams) => {
+interface DistanceFormData {
+	distance: number;
+}
+
+const DistanceToAirportForm = () => {
+	const airplanes = useAirplanesStore((state) => state.airplanes);
+
+	const {
+		register,
+		handleSubmit,
+		formState: { isSubmitSuccessful }
+	} = useForm<DistanceFormData>({ defaultValues: { distance: 0 } });
+
+	const onSubmit = (data: DistanceFormData) => {
+		const airplanesNextToAirport = getAirplanesNextToAirport(
+			airplanes,
+			data.distance
+		);
+
+		if (airplanesNextToAirport.length > 0) {
+		} else {
+		}
+	};
+
+	return (
+		<form onSubmit={handleSubmit(onSubmit)}>
+			<Box margin="1em 0">
+				<Text>Distância mínima</Text>
+				<Input
+					type="number"
+					step="any"
+					{...register('distance', { valueAsNumber: true })}
+				/>
+				<Button marginTop="1em" type="submit">
+					Aviões próximos ao aeroporto
+				</Button>
+			</Box>
+		</form>
+	);
+};
+
+const NextAirplanesForm = () => {
+	const airplanes = useAirplanesStore((state) => state.airplanes);
+
+	const {
+		register,
+		handleSubmit,
+		formState: { isSubmitSuccessful }
+	} = useForm<DistanceFormData>({ defaultValues: { distance: 0 } });
+
+	const onSubmit = (data: DistanceFormData) => {
+		debugger;
+		const airplanesNext = getNextPlanes(airplanes, data.distance);
+
+		if (airplanesNext.length > 0) {
+		} else {
+		}
+	};
+
+	return (
+		<form onSubmit={handleSubmit(onSubmit)}>
+			<Box margin="1em 0">
+				<Text>Distância mínima</Text>
+				<Input
+					type="number"
+					step="any"
+					{...register('distance', { valueAsNumber: true })}
+				/>
+				<Button marginTop="1em" type="submit">
+					Aviões próximos
+				</Button>
+			</Box>
+		</form>
+	);
+};
+
+const AirplanesInColisionRouteForm = () => {
 	const airplanes = useAirplanesStore((state) => state.airplanes);
 
 	const {
@@ -371,6 +451,25 @@ const ActionsForm = (params: ActionsFormParams) => {
 		} else {
 		}
 	};
+
+	return (
+		<form onSubmit={handleSubmit(onSubmit)}>
+			<Box margin="1em 0">
+				<Text>Tempo mínimo</Text>
+				<Input
+					type="number"
+					step="any"
+					{...register('time', { valueAsNumber: true })}
+				/>
+				<Button marginTop="1em" type="submit">
+					Em rota de colisão
+				</Button>
+			</Box>
+		</form>
+	);
+};
+
+const ActionsForm = (params: ActionsFormParams) => {
 	return (
 		<Accordion
 			className={`${styles.expandAll} ${params.className || ''}`}
@@ -415,29 +514,9 @@ const ActionsForm = (params: ActionsFormParams) => {
 					</AccordionButton>
 				</h2>
 				<AccordionPanel pb={4}>
-					<Box margin="1em 0">
-						<Text>Distância mínima</Text>
-						<Input type="number" step="any" />
-						<Button marginTop="1em">Aviões próximos ao aeroporto</Button>
-					</Box>
-					<Box margin="1em 0">
-						<Text>Distância mínima</Text>
-						<Input type="number" step="any" />
-						<Button marginTop="1em">Aviões próximos</Button>
-					</Box>
-					<form onSubmit={handleSubmit(onSubmit)}>
-						<Box margin="1em 0">
-							<Text>Tempo mínimo</Text>
-							<Input
-								type="number"
-								step="any"
-								{...register('time', { valueAsNumber: true })}
-							/>
-							<Button marginTop="1em" type="submit">
-								Em rota de colisão
-							</Button>
-						</Box>
-					</form>
+					<DistanceToAirportForm />
+					<NextAirplanesForm />
+					<AirplanesInColisionRouteForm />
 				</AccordionPanel>
 			</AccordionItem>
 		</Accordion>

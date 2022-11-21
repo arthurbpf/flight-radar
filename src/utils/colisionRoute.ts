@@ -1,6 +1,5 @@
 import { convertToRad } from './coordinateConversion';
 import Airplane from '../types/Airplane';
-import useAirplanesStore from '../stores/airplanesStore';
 
 interface AirplanesRiskOfColision {
 	airplaneA: Airplane;
