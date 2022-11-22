@@ -362,24 +362,23 @@ interface DistanceFormData {
 }
 
 const DistanceToAirportForm = () => {
-	const airplanes = useAirplanesStore((state) => state.airplanes);
-
 	const {
 		register,
 		handleSubmit,
+		reset,
+		formState,
 		formState: { isSubmitSuccessful }
 	} = useForm<DistanceFormData>({ defaultValues: { distance: 0 } });
 
 	const onSubmit = (data: DistanceFormData) => {
-		const airplanesNextToAirport = getAirplanesNextToAirport(
-			airplanes,
-			data.distance
-		);
-
-		if (airplanesNextToAirport.length > 0) {
-		} else {
-		}
+		getAirplanesNextToAirport(data.distance);
 	};
+
+	useEffect(() => {
+		if (isSubmitSuccessful) {
+			reset();
+		}
+	}, [formState, reset]);
 
 	return (
 		<form onSubmit={handleSubmit(onSubmit)}>
@@ -399,22 +398,23 @@ const DistanceToAirportForm = () => {
 };
 
 const NextAirplanesForm = () => {
-	const airplanes = useAirplanesStore((state) => state.airplanes);
-
 	const {
 		register,
 		handleSubmit,
+		reset,
+		formState,
 		formState: { isSubmitSuccessful }
 	} = useForm<DistanceFormData>({ defaultValues: { distance: 0 } });
 
 	const onSubmit = (data: DistanceFormData) => {
-		debugger;
-		const airplanesNext = getNextPlanes(airplanes, data.distance);
-
-		if (airplanesNext.length > 0) {
-		} else {
-		}
+		getNextPlanes(data.distance);
 	};
+
+	useEffect(() => {
+		if (isSubmitSuccessful) {
+			reset();
+		}
+	}, [formState, reset]);
 
 	return (
 		<form onSubmit={handleSubmit(onSubmit)}>
@@ -445,12 +445,14 @@ const AirplanesInColisionRouteForm = () => {
 	} = useForm<ColisionFormData>({ defaultValues: { time: 0 } });
 
 	const onSubmit = (data: ColisionFormData) => {
-		const airplanesWithRiskOfColision = colisionRoute(data.time, airplanes);
-
-		if (airplanesWithRiskOfColision.length > 0) {
-		} else {
-		}
+		colisionRoute(data.time);
 	};
+
+	useEffect(() => {
+		if (isSubmitSuccessful) {
+			reset();
+		}
+	}, [formState, reset]);
 
 	return (
 		<form onSubmit={handleSubmit(onSubmit)}>

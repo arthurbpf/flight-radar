@@ -1,9 +1,5 @@
 import Airplane from '../types/Airplane';
-
-interface returnAirPlanesNextToAirport {
-	airplane: Airplane;
-	distance: number;
-}
+import useAirplanesStore from '../stores/airplanesStore';
 
 interface returnAirPlanesNext {
 	airplaneA: Airplane;
@@ -11,35 +7,30 @@ interface returnAirPlanesNext {
 	distance: number;
 }
 
-export function getAirplanesNextToAirport(
-	airplanes: Airplane[],
-	distanceMin: number
-): returnAirPlanesNextToAirport[] {
-	const airplanesNext = <returnAirPlanesNextToAirport[]>[];
+export function getAirplanesNextToAirport(minDistance: number): void {
+	const { setState, getState } = useAirplanesStore;
+	const { airplanes } = getState();
 
-	airplanes.map((airplane) => {
-		const distance = Number(
-			Math.sqrt(
-				Math.pow(0 - airplane.x, 2) + Math.pow(0 - airplane.y, 2)
-			).toFixed(4)
-		);
+	let logs: string[] = [];
 
-		if (distance <= distanceMin) {
-			airplanesNext.push({
-				airplane,
-				distance
-			});
+	airplanes.forEach((airplane) => {
+		if (airplane.radius < minDistance) {
+			logs.push(
+				`Avião (X: ${airplane.x}; Y: ${
+					airplane.y
+				}) - Distância: ${airplane.radius.toFixed(2)}km`
+			);
 		}
 	});
 
-	return airplanesNext;
+	setState({ logs });
 }
 
-export function getNextPlanes(
-	airplanes: Airplane[],
-	distanceMin: number
-): returnAirPlanesNext[] {
-	const airplanesNext = <returnAirPlanesNext[]>[];
+export function getNextPlanes(minDistance: number) {
+	const { setState, getState } = useAirplanesStore;
+	const { airplanes } = getState();
+
+	let logs: string[] = [];
 
 	airplanes.map((airplane, index) => {
 		for (let i = index + 1; i <= airplanes.length - 1; i++) {
@@ -50,15 +41,15 @@ export function getNextPlanes(
 				).toFixed(4)
 			);
 
-			if (distance <= distanceMin) {
-				airplanesNext.push({
-					airplaneA: airplanes[i],
-					airplaneB: airplane,
-					distance
-				});
+			if (distance <= minDistance) {
+				logs.push(
+					`Avião (X: ${airplane.x}; Y: ${airplane.y}) | Avião (X: ${
+						airplanes[i].x
+					}; Y: ${airplanes[i].y})  - Distância: ${distance.toFixed(2)}km`
+				);
 			}
 		}
 	});
 
-	return airplanesNext;
+	setState({ logs });
 }

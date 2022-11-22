@@ -5,16 +5,19 @@ import Airplane from '../types/Airplane';
 interface AirplanesState {
 	airplanes: Airplane[];
 	selection: string[];
+	logs: string[];
 	setAirplanes: (airplanesArray: Airplane[]) => void;
 	addAirplane: (airplane: Airplane) => void;
 	removeAirplane: (id: string) => void;
 	selectAirplane: (id: string) => void;
 	deselectAirplane: (id: string) => void;
+	setLogs: (logsArray: string[]) => void;
 }
 
 const useAirplanesStore = create<AirplanesState>()((set) => ({
 	airplanes: [],
 	selection: [],
+	logs: [],
 	setAirplanes: (airplanesArray) => {
 		set({ airplanes: [...airplanesArray] });
 	},
@@ -42,6 +45,9 @@ const useAirplanesStore = create<AirplanesState>()((set) => ({
 		set((state) => ({
 			selection: state.selection.filter((selectedId) => selectedId !== id)
 		}));
+	},
+	setLogs: (logsArray) => {
+		set({ logs: [...logsArray] });
 	}
 }));
 

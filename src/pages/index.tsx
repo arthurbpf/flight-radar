@@ -11,7 +11,7 @@ const Home: NextPage = () => {
 			<div className={styles.container}>
 				<ActionsForm className={styles.actionsForm} />
 				<Radar className={styles.radar} />
-				<LogList />
+				<LogList className={styles.logList} />
 			</div>
 			<AirplanesList />
 		</div>
