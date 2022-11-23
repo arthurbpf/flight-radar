@@ -4,6 +4,7 @@ import useAirplanesStore from '../../stores/airplanesStore';
 import { IoIosAirplane } from 'react-icons/io';
 import { GiSpikyExplosion } from 'react-icons/gi';
 import useCollisionPointStore from '../../stores/collisionPointsStore';
+import { useEffect, useState } from 'react';
 
 interface RadarProps {
 	className?: string;
@@ -30,14 +31,21 @@ const Radar = ({ className }: RadarProps) => {
 		return limit;
 	}, 0);
 
-	if (limit == 0) limit = 15;
+	if (limit < 15) limit = 15;
 
 	return (
 		<Box className={className || ''}>
-			<VictoryChart theme={VictoryTheme.material} domain={[limit * -1, limit]}>
-				<VictoryScatter data={airplanes} dataComponent={<AirplanePoint />} />
+			<VictoryChart
+				theme={VictoryTheme.material}
+				domain={[limit * -1, limit]}
+				key={new Date().toISOString()}
+			>
 				<VictoryScatter
-					data={collisionPoints}
+					data={[...airplanes]}
+					dataComponent={<AirplanePoint />}
+				/>
+				<VictoryScatter
+					data={[...collisionPoints]}
 					dataComponent={<CollisionPoint />}
 				/>
 			</VictoryChart>
