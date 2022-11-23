@@ -13,7 +13,9 @@
     "@chakra-ui/react": "^2.3.4",
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
+    "algebra.js": "^0.2.6",
     "framer-motion": "^7.4.0",
+    "mathjs": "^11.4.0",
     "next": "12.3.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
@@ -24,6 +26,7 @@
     "zustand": "^4.1.1"
   },
   "devDependencies": {
+    "@types/algebra.js": "^0.2.2",
     "@types/node": "18.7.23",
     "@types/react": "18.0.21",
     "@types/react-dom": "18.0.6",
