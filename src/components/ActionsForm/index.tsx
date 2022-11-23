@@ -37,7 +37,9 @@ const InputForm = () => {
 		formState: { isSubmitSuccessful },
 		getValues,
 		setValue
-	} = useForm<Airplane>();
+	} = useForm<Airplane>({
+		defaultValues: { x: 0, y: 0, angle: 0, direction: 0, radius: 0, speed: 0 }
+	});
 
 	const onSubmit = (data: Airplane) => {
 		addAirplane(data);
