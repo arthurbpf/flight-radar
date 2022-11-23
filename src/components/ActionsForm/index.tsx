@@ -149,9 +149,9 @@ const TransformationForm = () => {
 	}
 
 	const TranslateForm = () => {
-		const { airplanes, selection, setAirplanes } = useAirplanesStore(
-			(state) => state
-		);
+		const airplanes = useAirplanesStore((state) => state.airplanes);
+		const selection = useAirplanesStore((state) => state.selection);
+		const setAirplanes = useAirplanesStore((state) => state.setAirplanes);
 
 		const {
 			register,
@@ -209,9 +209,9 @@ const TransformationForm = () => {
 	};
 
 	const ScaleForm = () => {
-		const { airplanes, selection, setAirplanes } = useAirplanesStore(
-			(state) => state
-		);
+		const airplanes = useAirplanesStore((state) => state.airplanes);
+		const selection = useAirplanesStore((state) => state.selection);
+		const setAirplanes = useAirplanesStore((state) => state.setAirplanes);
 
 		const {
 			register,
@@ -276,9 +276,9 @@ const TransformationForm = () => {
 	}
 
 	const RotateForm = () => {
-		const { airplanes, selection, setAirplanes } = useAirplanesStore(
-			(state) => state
-		);
+		const airplanes = useAirplanesStore((state) => state.airplanes);
+		const selection = useAirplanesStore((state) => state.selection);
+		const setAirplanes = useAirplanesStore((state) => state.setAirplanes);
 
 		const {
 			register,
