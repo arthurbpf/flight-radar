@@ -64,6 +64,18 @@ function getTimeDistance(
 	const directionAInRad = convertToRad(airplaneA.direction);
 	const directionBInRad = convertToRad(airplaneB.direction);
 
+	if (airplaneA.direction === 90 || airplaneA.direction === 270) {
+		return handle90and270cases(airplaneA, airplaneB, directionBInRad);
+	} else if (airplaneB.direction === 90 || airplaneB.direction === 270) {
+		const inverter = handle90and270cases(airplaneB, airplaneA, directionAInRad);
+
+		return {
+			...inverter,
+			timeToPointA: inverter.timeToPointB,
+			timeToPointB: inverter.timeToPointA
+		};
+	}
+
 	const coefA = Number(Math.tan(directionAInRad).toFixed(2)) || 0;
 
 	const coefB = Number(Math.tan(directionBInRad).toFixed(2)) || 0;
@@ -89,7 +101,9 @@ function getTimeDistance(
 	}
 
 	const yColision =
-		xInicialA < 0 ? -xColision + yInicialA : xColision + yInicialA;
+		xInicialA < 0
+			? -(xInicialA * xColision) + yInicialA
+			: xInicialA * xColision + yInicialA;
 
 	const dA = Number(
 			Math.sqrt(
@@ -122,6 +136,47 @@ function getTimeDistance(
 	} else {
 		riskOfColision = xColision <= 0;
 	}
+
+	return {
+		riskOfColision,
+		timeToColision,
+		timeToPointA: tA,
+		timeToPointB: tB
+	};
+}
+
+function handle90and270cases(
+	airplaneA: Airplane,
+	airplaneB: Airplane,
+	directionBInRad: number
+) {
+	const coefB = Number(Math.tan(directionBInRad).toFixed(2)) || 0;
+
+	const yFinalB = coefB * -airplaneB.x + airplaneB.y,
+		xFinalB = coefB;
+
+	const xColision = airplaneA.x;
+
+	const yColision = xFinalB * airplaneA.x + yFinalB;
+
+	let riskOfColision = true;
+
+	const dA = Number(
+			Math.sqrt(
+				Math.pow(xColision, 2) + Math.pow(yColision - airplaneA.y, 2)
+			).toFixed(4)
+		),
+		dB = Number(
+			Math.sqrt(
+				Math.pow(xColision - airplaneB.x, 2) +
+					Math.pow(yColision - airplaneB.y, 2)
+			).toFixed(4)
+		);
+
+	const tA = (dA / airplaneA.speed) * 3600,
+		tB = (dB / airplaneB.speed) * 3600;
+
+	const timeToColision = Math.abs(tA - tB);
 
 	return {
 		riskOfColision,
