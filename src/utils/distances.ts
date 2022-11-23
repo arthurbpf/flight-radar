@@ -1,5 +1,6 @@
 import Airplane from '../types/Airplane';
 import useAirplanesStore from '../stores/airplanesStore';
+import useCollisionPointStore from '../stores/collisionPointsStore';
 
 interface returnAirPlanesNext {
 	airplaneA: Airplane;
@@ -8,6 +9,10 @@ interface returnAirPlanesNext {
 }
 
 export function getAirplanesNextToAirport(minDistance: number): void {
+	const { setState: setStateCollision } = useCollisionPointStore;
+
+	setStateCollision({ collisionPoint: [] });
+
 	const { setState, getState } = useAirplanesStore;
 	const { airplanes } = getState();
 
@@ -27,6 +32,10 @@ export function getAirplanesNextToAirport(minDistance: number): void {
 }
 
 export function getNextPlanes(minDistance: number) {
+	const { setState: setStateCollision } = useCollisionPointStore;
+
+	setStateCollision({ collisionPoint: [] });
+
 	const { setState, getState } = useAirplanesStore;
 	const { airplanes } = getState();
 

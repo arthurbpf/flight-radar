@@ -1,7 +1,12 @@
+import useCollisionPointStore from '../stores/collisionPointsStore';
 import Airplane from '../types/Airplane';
 import { convertToPolar, convertToRad } from './coordinateConversion';
 
 export function translate(airplane: Airplane, x: number, y: number): Airplane {
+	const { setState: setStateCollision } = useCollisionPointStore;
+
+	setStateCollision({ collisionPoint: [] });
+
 	x += airplane.x;
 	y += airplane.y;
 
@@ -21,6 +26,10 @@ export function rotate(
 	xCenter: number,
 	yCenter: number
 ): Airplane {
+	const { setState: setStateCollision } = useCollisionPointStore;
+
+	setStateCollision({ collisionPoint: [] });
+
 	rotationAngle = convertToRad(rotationAngle);
 
 	const x =
@@ -47,6 +56,10 @@ export function scale(
 	xFactor: number,
 	yFactor: number
 ): Airplane {
+	const { setState: setStateCollision } = useCollisionPointStore;
+
+	setStateCollision({ collisionPoint: [] });
+
 	const x = airplane.x * xFactor;
 	const y = airplane.y * yFactor;
 

@@ -2,6 +2,8 @@ import { Box } from '@chakra-ui/react';
 import { VictoryChart, VictoryScatter, VictoryTheme } from 'victory';
 import useAirplanesStore from '../../stores/airplanesStore';
 import { IoIosAirplane } from 'react-icons/io';
+import { GiSpikyExplosion } from 'react-icons/gi';
+import useCollisionPointStore from '../../stores/collisionPointsStore';
 
 interface RadarProps {
 	className?: string;
@@ -9,6 +11,9 @@ interface RadarProps {
 
 const Radar = ({ className }: RadarProps) => {
 	const airplanes = useAirplanesStore((state) => state.airplanes);
+	const collisionPoints = useCollisionPointStore(
+		(state) => state.collisionPoint
+	);
 
 	let limit = airplanes.reduce((limit, airplane) => {
 		const airplaneX = Math.abs(airplane.x);
@@ -31,6 +36,10 @@ const Radar = ({ className }: RadarProps) => {
 		<Box className={className || ''}>
 			<VictoryChart theme={VictoryTheme.material} domain={[limit * -1, limit]}>
 				<VictoryScatter data={airplanes} dataComponent={<AirplanePoint />} />
+				<VictoryScatter
+					data={collisionPoints}
+					dataComponent={<CollisionPoint />}
+				/>
 			</VictoryChart>
 		</Box>
 	);
@@ -60,4 +69,24 @@ const AirplanePoint = (props: any) => {
 		</g>
 	);
 };
+
+const CollisionPoint = (props: any) => {
+	let { x, y } = props;
+	const size = 15;
+
+	x -= size / 2;
+	y -= size / 2;
+
+	return (
+		<g
+			style={{
+				transformBox: 'fill-box',
+				transformOrigin: 'center'
+			}}
+		>
+			<GiSpikyExplosion x={x} y={y} fontSize={`${size}px`} color="Orange" />
+		</g>
+	);
+};
+
 export default Radar;

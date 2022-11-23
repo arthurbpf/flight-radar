@@ -21,7 +21,7 @@ import {
 	convertToPolar
 } from '../../utils/coordinateConversion';
 import { rotate, scale, translate } from '../../utils/transformationFunctions';
-import { colisionRoute } from '../../utils/colisionRoute';
+import { collisionRoute } from '../../utils/collisionRoute';
 import {
 	getAirplanesNextToAirport,
 	getNextPlanes
@@ -353,7 +353,7 @@ interface ActionsFormParams {
 	className?: string;
 }
 
-interface ColisionFormData {
+interface CollisionFormData {
 	time: number;
 }
 
@@ -433,7 +433,7 @@ const NextAirplanesForm = () => {
 	);
 };
 
-const AirplanesInColisionRouteForm = () => {
+const AirplanesInCollisionRouteForm = () => {
 	const airplanes = useAirplanesStore((state) => state.airplanes);
 
 	const {
@@ -442,10 +442,10 @@ const AirplanesInColisionRouteForm = () => {
 		reset,
 		formState,
 		formState: { isSubmitSuccessful }
-	} = useForm<ColisionFormData>({ defaultValues: { time: 0 } });
+	} = useForm<CollisionFormData>({ defaultValues: { time: 0 } });
 
-	const onSubmit = (data: ColisionFormData) => {
-		colisionRoute(data.time);
+	const onSubmit = (data: CollisionFormData) => {
+		collisionRoute(data.time);
 	};
 
 	useEffect(() => {
@@ -518,7 +518,7 @@ const ActionsForm = (params: ActionsFormParams) => {
 				<AccordionPanel pb={4}>
 					<DistanceToAirportForm />
 					<NextAirplanesForm />
-					<AirplanesInColisionRouteForm />
+					<AirplanesInCollisionRouteForm />
 				</AccordionPanel>
 			</AccordionItem>
 		</Accordion>
