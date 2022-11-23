@@ -3,6 +3,7 @@ import Airplane from '../types/Airplane';
 import useAirplanesStore from '../stores/airplanesStore';
 import useCollisionPointStore from '../stores/collisionPointsStore';
 import CollisionPoint from '../types/CollisionPoint';
+import algebra from 'algebra.js';
 
 interface AirplanesRiskOfCollision {
 	airplaneA: Airplane;
@@ -77,24 +78,32 @@ function getTimeDistance(
 	airplaneA: Airplane,
 	airplaneB: Airplane
 ): ReturnGetTimeDistance {
+	const getEquation = () => {
+		const lineEquation = '(y2 - y1) = m(x2 - x1)';
+		return algebra.parse(lineEquation) as algebra.Equation;
+	};
+
 	const directionAInRad = convertToRad(airplaneA.direction);
 	const directionBInRad = convertToRad(airplaneB.direction);
 
+	const coefA = Number(Math.tan(directionAInRad).toFixed(2));
+	const coefB = Number(Math.tan(directionBInRad).toFixed(2));
+
+	let exA = getEquation().solveFor('y2') as algebra.Expression;
+	let exB = getEquation().solveFor('y2') as algebra.Expression;
+
+	exA = exA.eval({ x1: airplaneA.x, y1: airplaneA.y, m: coefA });
+	exB = exB.eval({ x1: airplaneB.x, y1: airplaneB.y, m: coefB });
+
+	const eqCollision = new algebra.Equation(exA, exB);
+
+	const xCollision = (eqCollision.solveFor('x2') as algebra.Fraction).valueOf();
+	const yCollision = exA.eval({ x2: xCollision }).constants[0].valueOf();
+
+	debugger;
 	if (airplaneA.direction === 90 || airplaneA.direction === 270) {
-		return handle90and270cases(airplaneA, airplaneB, directionBInRad);
 	} else if (airplaneB.direction === 90 || airplaneB.direction === 270) {
-		const inverter = handle90and270cases(airplaneB, airplaneA, directionAInRad);
-
-		return {
-			...inverter,
-			timeToPointA: inverter.timeToPointB,
-			timeToPointB: inverter.timeToPointA
-		};
 	}
-
-	const coefA = Number(Math.tan(directionAInRad).toFixed(2)) || 0;
-
-	const coefB = Number(Math.tan(directionBInRad).toFixed(2)) || 0;
 
 	const yInicialA = coefA * -airplaneA.x + airplaneA.y,
 		xInicialA = coefA;
@@ -104,8 +113,6 @@ function getTimeDistance(
 
 	const ladoX = xInicialA + xInicialB * -1,
 		ladoY = yInicialA * -1 + yInicialB;
-
-	const xCollision = ladoY / ladoX;
 
 	if (!xCollision || Math.abs(xCollision) === Infinity) {
 		return {
@@ -119,11 +126,6 @@ function getTimeDistance(
 			}
 		};
 	}
-
-	const yCollision =
-		xInicialA < 0
-			? -(xInicialA * xCollision) + yInicialA
-			: xInicialA * xCollision + yInicialA;
 
 	const dA = Number(
 			Math.sqrt(
