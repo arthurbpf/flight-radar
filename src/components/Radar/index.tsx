@@ -30,7 +30,7 @@ const Radar = ({ className }: RadarProps) => {
 		return limit;
 	}, 0);
 
-	if (limit < 15) limit = 15;
+	if (limit == 0) limit = 15;
 
 	return (
 		<Box className={className || ''}>
