@@ -42,16 +42,6 @@ export function collisionRoute(time: number) {
 				airplanesCollision.timeToCollision <= time &&
 				airplanesCollision.riskOfCollision
 			) {
-				logs.push(
-					`Avião (X: ${airplane.x}; Y: ${
-						airplane.y
-					}) T: ${airplanesCollision.timeToPointA.toFixed(2)}s | Avião (X: ${
-						airplanes[i].x
-					}; Y: ${airplanes[i].y}) T: ${airplanesCollision.timeToPointB.toFixed(
-						2
-					)}s - Colisão em: ${airplanesCollision.timeToCollision.toFixed(2)}s`
-				);
-
 				airplanesRiskOfCollision.push({
 					airplaneA: airplane,
 					airplaneB: airplanes[i],
@@ -66,6 +56,22 @@ export function collisionRoute(time: number) {
 				});
 			}
 		}
+
+		airplanesRiskOfCollision.sort((itemA, itemB) =>
+			itemA.timeToCollision < itemB.timeToCollision ? -1 : 1
+		);
+
+		airplanesRiskOfCollision.forEach((item) => {
+			logs.push(
+				`Avião (X: ${item.airplaneA.x}; Y: ${
+					item.airplaneA.y
+				}) T: ${item.timeToPointA.toFixed(2)}s | Avião (X: ${
+					item.airplaneB.x
+				}; Y: ${item.airplaneB.y}) T: ${item.timeToPointB.toFixed(
+					2
+				)}s - Colisão em: ${item.timeToCollision.toFixed(2)}s`
+			);
+		});
 	});
 
 	setStateCollision({ collisionPoint: collisionPoints });
@@ -107,10 +113,12 @@ function getTimeDistance(
 
 	const xCollision = ladoY / ladoX;
 
-	if (xCollision === null || 
-		xCollision === undefined || 
+	if (
+		xCollision === null ||
+		xCollision === undefined ||
 		xCollision === NaN ||
-		Math.abs(xCollision) === Infinity) {
+		Math.abs(xCollision) === Infinity
+	) {
 		return {
 			riskOfCollision: false,
 			timeToCollision: 0,
