@@ -107,7 +107,10 @@ function getTimeDistance(
 
 	const xCollision = ladoY / ladoX;
 
-	if (!xCollision || Math.abs(xCollision) === Infinity) {
+	if (xCollision === null || 
+		xCollision === undefined || 
+		xCollision === NaN ||
+		Math.abs(xCollision) === Infinity) {
 		return {
 			riskOfCollision: false,
 			timeToCollision: 0,
