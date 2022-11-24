@@ -244,7 +244,7 @@ function handle90and270cases(
 
 	const dA = Number(
 			Math.sqrt(
-				Math.pow(xCollision, 2) + Math.pow(yCollision - airplaneA.y, 2)
+				Math.pow(0, 2) + Math.pow(yCollision - airplaneA.y, 2)
 			).toFixed(4)
 		),
 		dB = Number(
