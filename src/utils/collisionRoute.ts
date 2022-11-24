@@ -60,20 +60,20 @@ export function collisionRoute(time: number) {
 	});
 
 	airplanesRiskOfCollision.sort((itemA, itemB) =>
-	itemA.timeToCollision < itemB.timeToCollision ? -1 : 1
-);
-
-airplanesRiskOfCollision.forEach((item) => {
-	logs.push(
-		`Avião (X: ${item.airplaneA.x}; Y: ${
-			item.airplaneA.y
-		}) T: ${item.timeToPointA.toFixed(2)}s | Avião (X: ${
-			item.airplaneB.x
-		}; Y: ${item.airplaneB.y}) T: ${item.timeToPointB.toFixed(
-			2
-		)}s - Colisão em: ${item.timeToCollision.toFixed(2)}s`
+		itemA.timeToCollision < itemB.timeToCollision ? -1 : 1
 	);
-});
+
+	airplanesRiskOfCollision.forEach((item) => {
+		logs.push(
+			`Avião (X: ${item.airplaneA.x}; Y: ${
+				item.airplaneA.y
+			}) T: ${item.timeToPointA.toFixed(2)}s | Avião (X: ${
+				item.airplaneB.x
+			}; Y: ${item.airplaneB.y}) T: ${item.timeToPointB.toFixed(
+				2
+			)}s - Colisão em: ${item.timeToCollision.toFixed(2)}s`
+		);
+	});
 
 	setStateCollision({ collisionPoint: collisionPoints });
 
@@ -157,16 +157,37 @@ function getTimeDistance(
 
 	const timeToCollision = Math.abs(tA - tB);
 
-	if (Math.sin(directionAInRad) > 0 || Math.sin(directionBInRad) > 0) {
-		riskOfCollision = yCollision >= 0;
-	} else {
-		riskOfCollision = yCollision <= 0;
+	debugger;
+	if (riskOfCollision) {
+		if (Math.sin(directionAInRad) > 0) {
+			riskOfCollision = yCollision >= airplaneA.y;
+		} else {
+			riskOfCollision = yCollision <= airplaneA.y;
+		}
 	}
 
-	if (Math.cos(directionAInRad) > 0 || Math.cos(directionBInRad) > 0) {
-		riskOfCollision = xCollision >= 0;
-	} else {
-		riskOfCollision = xCollision <= 0;
+	if (riskOfCollision) {
+		if (Math.sin(directionBInRad) > 0) {
+			riskOfCollision = yCollision >= airplaneB.y;
+		} else {
+			riskOfCollision = yCollision <= airplaneB.y;
+		}
+	}
+
+	if (riskOfCollision) {
+		if (Math.cos(directionAInRad) > 0) {
+			riskOfCollision = xCollision >= airplaneA.x;
+		} else {
+			riskOfCollision = xCollision <= airplaneA.x;
+		}
+	}
+
+	if (riskOfCollision) {
+		if (Math.cos(directionBInRad) > 0) {
+			riskOfCollision = xCollision >= airplaneB.x;
+		} else {
+			riskOfCollision = xCollision <= airplaneB.x;
+		}
 	}
 
 	return {
@@ -186,51 +207,52 @@ function handle90and270cases(
 	airplaneB: Airplane,
 	directionBInRad: number
 ): ReturnGetTimeDistance {
-	if(airplaneB.direction === 0 ||
-		airplaneB.direction === 180||
-		airplaneB.direction === 360){
-			let riskOfCollision = true;
-			debugger;
+	if (
+		airplaneB.direction === 0 ||
+		airplaneB.direction === 180 ||
+		airplaneB.direction === 360
+	) {
+		let riskOfCollision = true;
+		debugger;
 
-	const dA = Number(
-			Math.sqrt(
-				Math.pow(0, 2) + Math.pow(Math.abs(airplaneB.y - airplaneA.y), 2)
-			).toFixed(4)
-		),
-		dB = Number(
-			Math.sqrt(
-				Math.pow(airplaneA.x - airplaneB.x, 2) +
-					Math.pow(0, 2)
-			).toFixed(4)
-		);
+		const dA = Number(
+				Math.sqrt(
+					Math.pow(0, 2) + Math.pow(Math.abs(airplaneB.y - airplaneA.y), 2)
+				).toFixed(4)
+			),
+			dB = Number(
+				Math.sqrt(
+					Math.pow(airplaneA.x - airplaneB.x, 2) + Math.pow(0, 2)
+				).toFixed(4)
+			);
 
-	const tA = (dA / airplaneA.speed) * 3600,
-		tB = (dB / airplaneB.speed) * 3600;
+		const tA = (dA / airplaneA.speed) * 3600,
+			tB = (dB / airplaneB.speed) * 3600;
 
-	const timeToCollision = Math.abs(tA - tB);
+		const timeToCollision = Math.abs(tA - tB);
 
-	return {
-		riskOfCollision,
-		timeToCollision,
-		timeToPointA: tA,
-		timeToPointB: tB,
-		collisionPoint: {
-			x: airplaneA.x,
-			y: airplaneB.y
-		}
-	};	
-		} else if(airplaneB.direction === 90 || airplaneB.direction === 270) {
-			return {
-				riskOfCollision: false,
-				timeToCollision: 0,
-				timeToPointA: 0,
-				timeToPointB: 0,
-				collisionPoint: {
-					x: 0,
-					y: 0
-				}
+		return {
+			riskOfCollision,
+			timeToCollision,
+			timeToPointA: tA,
+			timeToPointB: tB,
+			collisionPoint: {
+				x: airplaneA.x,
+				y: airplaneB.y
 			}
-		}
+		};
+	} else if (airplaneB.direction === 90 || airplaneB.direction === 270) {
+		return {
+			riskOfCollision: false,
+			timeToCollision: 0,
+			timeToPointA: 0,
+			timeToPointB: 0,
+			collisionPoint: {
+				x: 0,
+				y: 0
+			}
+		};
+	}
 	const coefB = Number(Math.tan(directionBInRad).toFixed(2)) || 0;
 
 	const yFinalB = coefB * -airplaneB.x + airplaneB.y,
@@ -243,9 +265,9 @@ function handle90and270cases(
 	let riskOfCollision = true;
 
 	const dA = Number(
-			Math.sqrt(
-				Math.pow(0, 2) + Math.pow(yCollision - airplaneA.y, 2)
-			).toFixed(4)
+			Math.sqrt(Math.pow(0, 2) + Math.pow(yCollision - airplaneA.y, 2)).toFixed(
+				4
+			)
 		),
 		dB = Number(
 			Math.sqrt(
